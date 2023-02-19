@@ -184,9 +184,9 @@
                 }
 
             }).on('create_node.jstree', function (e, data) {
+                debugger;
                 var url = '@Url.Action("CreateNote","Note")';
-                var id = data.node.id;
-                var id = id[1];
+                var id = data.node.parent;
                 debugger;
                 $.ajax({
                     url: url + "?id=" + id,
