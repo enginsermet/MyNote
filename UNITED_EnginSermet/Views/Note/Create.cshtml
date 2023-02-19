@@ -1,0 +1,75 @@
+﻿@model UNITED_EnginSermet.Entities.Note
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Note</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div id="note" class="card border-primary mb-3" style="max-width: 20rem;">
+                <div class="card-header">
+                    <input asp-for="Title" placeholder="Başlık" class="form-control title" style="width:12vw;" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="card-body">
+                    <textarea asp-for="Description" placeholder="Notunuzu yazın..." class="form-control description" rows="4"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-outline-primary">Kaydet</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<style>
+    .title, .description{
+        border: none;
+        background-color: transparent;
+        padding: 0 !important;
+    }
+        .title:focus, .description:focus{
+        border: none;
+        background-color: transparent;
+        outline: none;
+        box-shadow: none;
+    }
+</style>
+
+<script>
+    function pickColor() {
+
+        // Array containing colors
+        var colors = [
+            '#fff740', '#feff9c', '#7afcff',
+            '#ff65a3', '#ff7eb9'
+        ];
+
+        var random_color = colors[Math.floor(
+            Math.random() * colors.length)];
+
+        var x = document.getElementById('note');
+        x.style.background = random_color;
+    }
+    pickColor();
+
+</script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }
+
+

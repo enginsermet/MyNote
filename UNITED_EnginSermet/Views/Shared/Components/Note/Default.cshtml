@@ -1,0 +1,48 @@
+﻿@model UNITED_EnginSermet.DTOs.NoteDTO;
+
+
+<form asp-action="">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div id="note" class="card border-primary mb-3" style="max-width: 20rem;">
+        <div class="card-header">
+            <input asp-for="@Model.Title" value="@Model?.Title" placeholder="Başlık" class="form-control title" style="width:12vw;"/>
+            <span asp-validation-for="@Model.Title" class="text-danger"></span>
+        </div>
+        <div class="card-body">
+            <textarea asp-for="@Model.Description" value="@Model?.Description" placeholder="Notunuzu yazın..." class="form-control description" rows="4"></textarea>
+            <span asp-validation-for="@Model.Description" class="text-danger"></span>
+        </div>
+    </div>
+</form>
+
+<style>
+    .title, .description{
+        border: none;
+        background-color: transparent;
+        padding: 0 !important;
+    }
+        .title:focus, .description:focus{
+        border: none;
+        background-color: transparent;
+        outline: none;
+        box-shadow: none;
+    }
+</style>
+
+<script>
+    function pickColor() {
+
+        var colors = [
+            '#fff740', '#feff9c', '#7afcff',
+            '#ff65a3', '#ff7eb9'
+        ];
+
+        var random_color = colors[Math.floor(
+            Math.random() * colors.length)];
+
+        var x = document.getElementById('note');
+        x.style.background = random_color;
+    }
+    pickColor();
+
+</script>

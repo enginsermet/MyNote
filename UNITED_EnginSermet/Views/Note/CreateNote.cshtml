@@ -1,0 +1,58 @@
+﻿@model UNITED_EnginSermet.Entities.Note
+
+@{
+    ViewData["Title"] = "Create";
+    var routeValues = new RouteValueDictionary();
+    routeValues.Add("id", ViewBag.id);
+}
+
+<h1>Create</h1>
+
+<h4>Note</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        @using (Html.BeginForm("CreateNote", "Note", routeValues, FormMethod.Post))
+            {
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="card border-primary mb-3" style="max-width: 20rem;">
+                <div class="card-header">
+                    <input asp-for="Title" placeholder="Başlık" class="form-control title" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="card-body">
+                    <textarea asp-for="Description" placeholder="Notunuzu yazın..." class="form-control description" rows="3"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-outline-primary">Kaydet</button>
+            </div>
+        }
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<style>
+    .title, .description {
+        border: none;
+        background-color: transparent;
+        padding: 0 !important;
+    }
+
+        .title:focus, .description:focus {
+            border: none;
+            background-color: transparent;
+            outline: none;
+            box-shadow: none;
+        }
+</style>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

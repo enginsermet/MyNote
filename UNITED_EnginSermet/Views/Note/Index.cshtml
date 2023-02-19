@@ -1,0 +1,227 @@
+﻿@using UNITED_EnginSermet.Components
+
+@model UNITED_EnginSermet.DTOs.NoteDTO;
+
+@addTagHelper *, ViewComponents
+
+@{
+    ViewData["Title"] = "Notlarım";
+}
+
+<h1 style="text-align: center;">Notlarım</h1>
+
+<p style="text-align: center;">
+    <a asp-action="Create">Yeni Oluştur</a>
+</p>
+
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+</head>
+<body>
+    <div class="main">
+        <div id="jstree">
+        </div>
+        <div>
+            @await Component.InvokeAsync("Note", new{note = Model})
+            <vc:note note=@Model></vc:note>
+        </div>
+    </div>
+    @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+    {
+        <input type="hidden" name="selectedItems" id="selectedItems" />
+        @*<input type="submit" value="Submit" />*@
+    }
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.1.1/jstree.min.js"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            $('#jstree').on('changed.jstree', function (e, data) {
+                var i, j;
+                var selectedItems = [];
+                var selectedNode;
+                for (i = 0, j = data.selected.length; i < j; i++) {
+
+                    //Fetch the Id.
+                    var id = data.selected[i];
+
+                    //Remove the ParentId.
+                    if (id.indexOf('-') != -1) {
+                        id = id.split("-")[1];
+                    }
+
+                    //Add the Node to the JSON Array.
+                    selectedItems.push({
+                        text: data.instance.get_node(data.selected[i]).text,
+                        id: id,
+                        parent: data.node.parents[0]
+                    });
+                }
+
+                //Serialize the JSON Array and save in HiddenField.
+                $('#selectedItems').val(JSON.stringify(selectedItems));
+            }).jstree({
+                "core": {
+                    "check_callback": true,
+
+                    "themes": {
+                        "variant": "large"
+                    },
+                    "data": @Html.Raw(ViewBag.Json)
+                                            },
+                "checkbox": {
+                    "keep_selected_style": false
+                },
+                "plugins": ["wholerow", "checkbox", "themes", "html_data", "ui", "contextmenu"],
+                "contextmenu": {
+                    "select_node": false,
+
+                }
+            }).on('ready.jstree', function () { 
+                $(this).jstree('open_all') 
+            }).on("select_node.jstree", function (e, data) {
+                var id = data.node.id;
+
+                if (id.indexOf('-') != -1) {
+                    debugger;
+                    id = id.split("-")[1];
+
+                    var url = '@Url.Action("DisplaySubNote","Note")';
+
+                    $.ajax({
+                        url: url + "?subNoteId=" + id,
+                        type: 'GET',
+                        cors: true,
+                        contentType: 'application/json',
+                        secure: true,
+                        headers: {
+                            'Access-Control-Allow-Origin': '*',
+                        },
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader("Authorization", "Basic " + btoa(""));
+                        },
+                        success: function (res) {
+                            window.location.replace(url + "?id=" + id)
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
+                }
+                else {
+                    var url = '@Url.Action("DisplayNote","Note")';
+
+                    $.ajax({
+                        url: url + "?id=" + id,
+                        type: 'GET',
+                        cors: true,
+                        contentType: 'application/json',
+                        secure: true,
+                        headers: {
+                            'Access-Control-Allow-Origin': '*',
+                        },
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader("Authorization", "Basic " + btoa(""));
+                        },
+                        success: function (res) {
+                            window.location.replace(url + "?id=" + id)
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
+                }
+            }).on('delete_node.jstree', function (e, data) {
+                var id = data.node.id;
+                if (id.indexOf('-') != -1) {
+                    id = id.split("-")[1];
+
+                    var url = '@Url.Action("DeleteNote","Note")';
+                    $.ajax({
+                        url: url + "/" + id,
+                        type: 'POST',
+                        cors: true,
+                        contentType: 'application/json',
+                        secure: true,
+                        headers: {
+                            'Access-Control-Allow-Origin': '*',
+                        },
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader("Authorization", "Basic " + btoa(""));
+                        },
+                        success: function (res) {
+                            console.log(res);
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
+                }
+                else{
+                    var url = '@Url.Action("Delete","Note")';
+                    $.ajax({
+                        url: url + "/" + id,
+                        type: 'POST',
+                        cors: true,
+                        contentType: 'application/json',
+                        secure: true,
+                        headers: {
+                            'Access-Control-Allow-Origin': '*',
+                        },
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader("Authorization", "Basic " + btoa(""));
+                        },
+                        success: function (res) {
+                            console.log(res);
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
+                }
+
+            }).on('create_node.jstree', function (e, data) {
+                var url = '@Url.Action("CreateNote","Note")';
+                var id = data.node.id;
+                var id = id[1];
+                debugger;
+                $.ajax({
+                    url: url + "?id=" + id,
+                    type: 'GET',
+                    cors: true,
+                    contentType: 'application/json',
+                    secure: true,
+                    headers: {
+                        'Access-Control-Allow-Origin': '*',
+                    },
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("Authorization", "Basic " + btoa(""));
+                    },
+                    success: function (res) {
+                        console.log(res);
+                        window.location.replace(url + "?id=" + id)
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            })
+        });
+    </script>
+</body>
+</html>
+
+
+<style>
+    .main{
+         display: inline-flex;
+         width: 100%;
+         justify-content: space-around;
+         margin-top: 2.5rem;
+    }
+
+
+</style>
