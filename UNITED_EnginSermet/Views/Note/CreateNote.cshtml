@@ -15,13 +15,13 @@
         @using (Html.BeginForm("CreateNote", "Note", routeValues, FormMethod.Post))
             {
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="card border-primary mb-3" style="max-width: 20rem;">
+            <div id="note" class="card border-primary mb-3" style="max-width: 20rem;">
                 <div class="card-header">
-                    <input asp-for="Title" placeholder="Başlık" class="form-control title" />
+                    <input asp-for="Title" placeholder="Başlık" class="form-control title" style="width: 12vw;"/>
                     <span asp-validation-for="Title" class="text-danger"></span>
                 </div>
                 <div class="card-body">
-                    <textarea asp-for="Description" placeholder="Notunuzu yazın..." class="form-control description" rows="3"></textarea>
+                    <textarea asp-for="Description" placeholder="Notunuzu yazın..." class="form-control description" rows="4"></textarea>
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
             </div>
@@ -33,7 +33,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Listeye geri dön</a>
 </div>
 
 <style>
@@ -50,6 +50,25 @@
             box-shadow: none;
         }
 </style>
+
+<script>
+    function pickColor() {
+
+        // Array containing colors
+        var colors = [
+            '#fff740', '#feff9c', '#7afcff',
+            '#ff65a3', '#ff7eb9'
+        ];
+
+        var random_color = colors[Math.floor(
+            Math.random() * colors.length)];
+
+        var x = document.getElementById('note');
+        x.style.background = random_color;
+    }
+    pickColor();
+
+</script>
 
 @section Scripts {
     @{

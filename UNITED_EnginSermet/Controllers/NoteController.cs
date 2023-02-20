@@ -11,9 +11,11 @@ using UNITED_EnginSermet.DTOs;
 using UNITED_EnginSermet.Entities;
 using UNITED_EnginSermet.Models;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace UNITED_EnginSermet.Controllers
 {
+    [Authorize]
     public class NoteController : Controller
     {
         private readonly DataContext _context;
