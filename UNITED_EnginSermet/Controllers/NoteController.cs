@@ -51,6 +51,7 @@ namespace UNITED_EnginSermet.Controllers
                 nodes.Add(new TreeViewNode { id = subNote.NoteId.ToString() + "-" + subNote.Id.ToString(), parent = subNote.NoteId.ToString(), text = subNote.Title });
             }
 
+
             //Serialize to JSON string.
             string jsonString = JsonConvert.SerializeObject(nodes);
             ViewBag.Json = jsonString;
